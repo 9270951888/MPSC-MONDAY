@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Countdown Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      transition: background-color 0.5s;
+    }
+    .clock {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="clock" id="clock">--:--:--</div>
+
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSer6a9XMucsRMZ_EWe7TjJtRzyfM2TobWNMnVt3UcZi33ySxA/viewform?embedded=true"></iframe>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+
+      // आज 12:30 PM
+      let testStart = new Date();
+      testStart.setHours(12, 30, 0, 0);
+
+      // आज 1:00 PM
+      let testEnd = new Date();
+      testEnd.setHours(13, 0, 0, 0);
+
+      // अगर अभी 1:00 PM के बाद है तो कल के लिए सेट करो
+      if (now >= testEnd) {
+        testStart.setDate(testStart.getDate() + 1);
+        testEnd.setDate(testEnd.getDate() + 1);
+      }
+
+      let message = "";
+      let targetTime;
+
+      if (now < testStart) {
+        // test शुरू होने में कितना टाइम
+        message = "Test will be start in: ";
+        targetTime = testStart;
+        document.body.style.backgroundColor = "lightgreen";
+      } else if (now >= testStart && now < testEnd) {
+        // test खत्म होने तक कितना टाइम
+        message = "Test remaining time: ";
+        targetTime = testEnd;
+        document.body.style.backgroundColor = "lightcoral";
+      } else {
+        // fallback safety
+        message = "Test will be start in: ";
+        targetTime = testStart;
+        document.body.style.backgroundColor = "lightgreen";
+      }
+
+      // उलटी गिनती निकालो
+      let totalSeconds = Math.floor((targetTime - now) / 1000);
+
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+
+      document.getElementById('clock').textContent = `${message}${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // तुरंत चलाओ
+  </script>
+
+</body>
+</html>
